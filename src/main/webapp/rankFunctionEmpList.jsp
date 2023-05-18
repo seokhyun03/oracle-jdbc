@@ -2,12 +2,12 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 <%
-	//현재페이지
+	// 현재페이지
 	int currentPage = 1;
 	if(request.getParameter("currentPage") != null) {
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	}
-	//oracle db 접속
+	// oracle db 접속
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String dburl = "jdbc:oracle:thin:@localhost:1521:xe";
 	String dbuser = "HR";
@@ -38,6 +38,7 @@
 	}
 	// 마지막 페이지 번호
 	int lastPage = totalRow / rowPerPage;
+	// 표시하지 못한 행이 있을 경우 페이지 + 1
 	if(totalRow % rowPerPage != 0) {
 		lastPage = lastPage + 1;
 	}
@@ -99,28 +100,31 @@
 		int minPage = (currentPage-1) / pagePerPage * pagePerPage + 1;
 		// 최대 페이지
 		int maxPage = minPage + pagePerPage - 1;
+		// 최대 페이지가 마지막 페이지 보다 크면 최대 페이지 = 마지막 페이지
 		if(maxPage > lastPage) {
 			maxPage = lastPage;
 		}
 		// 이전 페이지
+		// 최소 페이지가 1보타 클 경우 이전 페이지 표시
 		if(minPage>1) {
 	%>
 			<a href="<%=request.getContextPath()%>/rankFunctionEmpList.jsp?currentPage=<%=minPage-pagePerPage%>">이전</a>
 	<%			
 		}
-		// 최대 10개의 페이지
+		// 최소 페이지부터 최대 페이지까지 표시
 		for(int i = minPage; i<=maxPage; i=i+1) {
-			if(i == currentPage) {
+			if(i == currentPage) {	// 현재페이지는 링크 비활성화
 	%>	
 			<%=i%>
 	<%			
-			}else {
+			}else {					// 현재페이지가 아닌 페이지는 링크 활성화
 	%>	
 				<a href="<%=request.getContextPath()%>/rankFunctionEmpList.jsp?currentPage=<%=i%>"><%=i%></a>
 	<%				
 			}
 		}
 		// 다음 페이지
+		// 최대 페이지가 마지막 페이지와 다를 경우 다음 페이지 표시
 		if(maxPage != lastPage) {
 	%>
 			<a href="<%=request.getContextPath()%>/rankFunctionEmpList.jsp?currentPage=<%=minPage+pagePerPage%>">다음</a>
