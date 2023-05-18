@@ -45,7 +45,7 @@
 	// sql 전송
 	PreparedStatement rankStmt = null;
 	ResultSet rankRs = null;
-	String rankSql = "select 번호, 직원ID, 이름, 급여, 급여순위 from (select rownum 번호, * from (select employee_id 직원ID, last_name 이름, salary 급여, rank() over(order by salary desc) 급여순위 from employees)) where 번호 between ? and ?";
+	String rankSql = "select 번호, 직원ID, 이름, 급여, 급여순위 from (select rownum 번호, 직원ID, 이름, 급여, 급여순위 from (select employee_id 직원ID, last_name 이름, salary 급여, rank() over(order by salary desc) 급여순위 from employees)) where 번호 between ? and ?";
 	rankStmt = conn.prepareStatement(rankSql);
 	rankStmt.setInt(1,beginRow);
 	rankStmt.setInt(2,endRow);
